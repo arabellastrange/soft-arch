@@ -31,6 +31,11 @@ public class MovingGameObject extends GameObject {
     }
 
     @Override
+    protected boolean isStatic() {
+        return false;
+    }
+
+    @Override
     public GameObject clone() {
         return new MovingGameObject(getLines(), getCircles(), reflectionCoefficient);
     }

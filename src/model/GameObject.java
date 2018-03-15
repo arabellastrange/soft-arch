@@ -121,7 +121,9 @@ public abstract class GameObject implements Drawable, Cloneable {
             }
         }
 
-        return new CollisionDetails(shortestTime, newVelocity);
+        CollisionDetails cd = new CollisionDetails(shortestTime, newVelocity);
+        cd.setIsCollidingWithStaticObject(this.isStatic());
+        return cd;
 
     }
     protected abstract double timeUntilLineCollision(LineSegment line, Circle ballCircle, Vect ballVelocity);
@@ -129,5 +131,7 @@ public abstract class GameObject implements Drawable, Cloneable {
 
     protected abstract double timeUntilCircleCollision(Circle circle, Circle ballCircle, Vect ballVelocity);
     protected abstract Vect velocityOfCircleCollision(Circle circle, Circle ballCircle, Vect ballVelocity);
+
+    protected abstract boolean isStatic();
 
 }

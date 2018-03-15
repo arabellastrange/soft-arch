@@ -32,6 +32,11 @@ public class StaticGameObject extends GameObject {
     }
 
     @Override
+    protected boolean isStatic() {
+        return true;
+    }
+
+    @Override
     public GameObject clone() {
         return new StaticGameObject(getLines(), getCircles(), reflectionCoefficient);
     }

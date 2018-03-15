@@ -13,6 +13,7 @@ public class CollisionDetails {
 	private Vect velocity;
 	private Absorber absorber;
 	private Collidable collidingWith;
+	private boolean isCollidingWithStaticObject;
 
 	public CollisionDetails(double t, Vect v) {
 		tuc = t;
@@ -34,6 +35,14 @@ public class CollisionDetails {
 	public void setAbsorber (Absorber a)
 	{
 		absorber = a;
+	}
+
+	public boolean isCollidingWithStaticObject(){
+		return isCollidingWithStaticObject;
+	}
+
+	void setIsCollidingWithStaticObject(boolean bool){
+		this.isCollidingWithStaticObject = bool;
 	}
 
 	@Override

@@ -112,45 +112,50 @@ public class Ball extends Gizmo implements Tickable, TileIndependentGizmo {
         //Start of Calculation
         // \/ \/ \/ \/ \/ \/ \/
 
-        //Get the new XY velocities of the ball during
-        double[] newVel = getNewVelocities(currentVelXY, justFired, timeMoving);
+        if(tuc != 0 || !cd.isCollidingWithStaticObject()) {
+            //Get the new XY velocities of the ball during
+            double[] newVel = getNewVelocities(currentVelXY, justFired, timeMoving);
 
-        //Set the balls new velocity and move the ball for the correct amount of time
-        setVelocity(newVel[0], newVel[1]);
-        moveBallForTime(timeMoving);
+            //Set the balls new velocity and move the ball for the correct amount of time
+            setVelocity(newVel[0], newVel[1]);
+            moveBallForTime(timeMoving);
 
-        if (isCollidingThisTick) {
-            //At this point the ball has collided with something
+            if (isCollidingThisTick) {
+                //At this point the ball has collided with something
 
-            //If the collision is with an absorber, absorb the ball.
-            if (isCollidingWithAbsorberNext) {
-                isAbsorbed = true;
-                collidedAbsorber.setAbsorbedBall(this);
-                cx = cd.getAbsorber().getPosition()[0] + Double.valueOf(cd.getAbsorber().getProperty(GizmoPropertyType.WIDTH)) - 0.5;
-                cy = cd.getAbsorber().getPosition()[1] + Double.valueOf(cd.getAbsorber().getProperty(GizmoPropertyType.HEIGHT)) / 2;
-                cd.getCollidingWith().collide(); // need to collide after absorbing the ball
-            } else {
-                //If we get to here, the ball is colliding this tick, and it is not with an absorber
-                //So we set the post-collision velocity, then move the ball for the remaining time with its new velocity
+                //If the collision is with an absorber, absorb the ball.
+                if (isCollidingWithAbsorberNext) {
+                    isAbsorbed = true;
+                    collidedAbsorber.setAbsorbedBall(this);
+                    cx = cd.getAbsorber().getPosition()[0] + Double.valueOf(cd.getAbsorber().getProperty(GizmoPropertyType.WIDTH)) - 0.5;
+                    cy = cd.getAbsorber().getPosition()[1] + Double.valueOf(cd.getAbsorber().getProperty(GizmoPropertyType.HEIGHT)) / 2;
+                    cd.getCollidingWith().collide(); // need to collide after absorbing the ball
+                } else {
+                    //If we get to here, the ball is colliding this tick, and it is not with an absorber
+                    //So we set the post-collision velocity, then move the ball for the remaining time with its new velocity
 
-                cd.getCollidingWith().collide();
+                    double[] rememberMe = new double[]{cx, cy};
 
-                newVel = getNewVelocities(velAfterCollisionXY, justFired, lengthOfTick - tuc);
+                    cd.getCollidingWith().collide();
 
-                setVelocity(newVel[0], newVel[1]);
-                moveBallForTime(lengthOfTick - tuc);
+                    newVel = getNewVelocities(velAfterCollisionXY, justFired, lengthOfTick - tuc);
+
+                    setVelocity(newVel[0], newVel[1]);
+                    moveBallForTime(lengthOfTick - tuc);
+                }
+
             }
 
+            //If the ball has just been fired, one tick later, it has not just been fired
+            if (justFired)
+                justFired = false;
 
         }
-
-        //If the ball has just been fired, one tick later, it has not just been fired
-        if (justFired)
-            justFired = false;
 
         // /\ /\ /\ /\ /\ /\ /\
         //End of Calculations
         //=====================
+
     }
 
 //    private double[] getNewVelocities(double[] currentVelXY, boolean justFired, double timeMoving) {

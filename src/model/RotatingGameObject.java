@@ -43,6 +43,11 @@ public class RotatingGameObject extends GameObject {
     }
 
     @Override
+    protected boolean isStatic() {
+        return false;
+    }
+
+    @Override
     public GameObject clone() {
         return new RotatingGameObject(getLines(), getCircles(), reflectionCoefficient, rotationPivot, angularVelocity);
     }
